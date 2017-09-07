@@ -1,18 +1,14 @@
 # coding: utf-8
 
 """
-Markdown renderer
-=================
+    Markdown renderer
+    ~~~~~~~~~~~~~~~~~
 
-This class renders parsed markdown back to markdown.
-It is useful for automatic modifications of the md contents.
+    This class renders parsed markdown back to markdown.
+    It is useful for automatic modifications of the md contents.
 
-Authors and License
--------------------
-
-Copyright (C) 2015 Jaroslav Kysela
-
-License: WTFPL 2
+    :copyright: (c) 2015 by Jaroslav Kysela
+    :licence: WTFPL 2
 """
 
 from mistune import Renderer
