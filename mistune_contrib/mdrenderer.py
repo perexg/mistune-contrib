@@ -7,7 +7,8 @@ Markdown renderer
 This class renders parsed markdown back to markdown.
 It is useful for automatic modifications of the md contents.
 
-## Authors and License
+Authors and License
+-------------------
 
 Copyright (C) 2015 Jaroslav Kysela
 
@@ -61,7 +62,7 @@ class MdRenderer(Renderer):
     return 'l' + str(len(text)) + ':' + text
 
   def block_code(self, code, lang=None):
-    return '```no-highlight\n' + code + '\n```\n'
+    return '```\n' + code + '\n```\n'
 
   def block_quote(self, text):
     r = ''
