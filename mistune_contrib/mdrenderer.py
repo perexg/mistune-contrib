@@ -17,10 +17,6 @@ License: WTFPL 2
 
 from mistune import Renderer
 
-class Object:
-
-   pass
-
 class MdRenderer(Renderer):
 
   def get_block(text):
@@ -110,10 +106,7 @@ class MdRenderer(Renderer):
             fl, v = t2.split('=')
             flags[fl] = v
           elif type2 == 'c':
-            c = Object()
-            c.flags = flags
-            c.text = t2
-            cols.append(c)
+            cols.append(type('',(object,),{'flags':flags,'text':t2})())
         hrows.append(cols)
     brows = []
     while body:
@@ -127,10 +120,7 @@ class MdRenderer(Renderer):
             fl, v = t2.split('=')
             flags[fl] = v
           elif type2 == 'c':
-            c = Object()
-            c.flags = flags
-            c.text = t2
-            cols.append(c)
+            cols.append(type('',(object,),{'flags':flags,'text':t2})())
         brows.append(cols)
     colscount = 0
     colmax = [0] * 100
