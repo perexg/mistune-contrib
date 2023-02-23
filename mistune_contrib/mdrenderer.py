@@ -1,24 +1,17 @@
 # coding: utf-8
 
 """
-Markdown renderer
-=================
+    Markdown renderer
+    ~~~~~~~~~~~~~~~~~
 
-This class renders parsed markdown back to markdown.
-It is useful for automatic modifications of the md contents.
+    This class renders parsed markdown back to markdown.
+    It is useful for automatic modifications of the md contents.
 
-## Authors and License
-
-Copyright (C) 2015 Jaroslav Kysela
-
-License: WTFPL 2
+    :copyright: (c) 2015 by Jaroslav Kysela
+    :licence: WTFPL 2
 """
 
 from mistune import Renderer
-
-class Object:
-
-   pass
 
 class MdRenderer(Renderer):
 
@@ -61,7 +54,7 @@ class MdRenderer(Renderer):
     return 'l' + str(len(text)) + ':' + text
 
   def block_code(self, code, lang=None):
-    return '```no-highlight\n' + code + '\n```\n'
+    return '```\n' + code + '\n```\n'
 
   def block_quote(self, text):
     r = ''
@@ -109,10 +102,7 @@ class MdRenderer(Renderer):
             fl, v = t2.split('=')
             flags[fl] = v
           elif type2 == 'c':
-            c = Object()
-            c.flags = flags
-            c.text = t2
-            cols.append(c)
+            cols.append(type('',(object,),{'flags':flags,'text':t2})())
         hrows.append(cols)
     brows = []
     while body:
@@ -126,18 +116,18 @@ class MdRenderer(Renderer):
             fl, v = t2.split('=')
             flags[fl] = v
           elif type2 == 'c':
-            c = Object()
-            c.flags = flags
-            c.text = t2
-            cols.append(c)
+            cols.append(type('',(object,),{'flags':flags,'text':t2})())
         brows.append(cols)
     colscount = 0
     colmax = [0] * 100
+    align = [''] * 100
     for row in hrows + brows:
       colscount = max(len(row), colscount)
       i = 0
       for col in row:
         colmax[i] = max(len(col.text), colmax[i])
+        if 'align' in col.flags:
+          align[i] = col.flags['align'][0]
         i += 1
     r = ''
     for row in hrows:
@@ -150,8 +140,15 @@ class MdRenderer(Renderer):
       r += '\n'
     for i in range(colscount):
       if i > 0:
-        r += '-|-'
-      r += '-'.ljust(colmax[i], '-')
+        r += ' | '
+      if align[i] == 'c':
+        r += ':' + '-'.ljust(colmax[i]-2, '-') + ':'
+      elif align[i] == 'l':
+        r += ':' + '-'.ljust(colmax[i]-1, '-')
+      elif align[i] == 'r':
+        r +=  '-'.ljust(colmax[i]-1, '-') + ':'
+      else:
+        r += '-'.ljust(colmax[i], '-')
     r += '\n'
     for row in brows:
       i = 0
